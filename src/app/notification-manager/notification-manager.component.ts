@@ -33,7 +33,7 @@ export class NotificationManagerComponent {
         ],
         newPositions: [
           'Manager',
-          'Break Room Attendent'
+          'Break Room Attendant'
         ]
       }
     };
