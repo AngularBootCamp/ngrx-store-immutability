@@ -11,7 +11,7 @@ import { AppState } from '../../state';
 */
 @Component({
   selector: 'employee-list',
-  templateUrl: './employee-list.component.html',
+  templateUrl: './employee-list.component.html'
 })
 export class EmployeeListComponent {
 
