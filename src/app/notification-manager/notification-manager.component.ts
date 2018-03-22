@@ -2,7 +2,7 @@ import { DataReceivedAction, AckAllAction } from './../state';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { AppState, ACK_ALL, DATA_RECEIVED } from '../state';
+import { AppState } from '../state';
 
 @Component({
   selector: 'notification-manager',

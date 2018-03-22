@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { AckAllAction, ACK_ALL, DATA_RECEIVED, DataReceivedAction } from './state';
+import { ACK_ALL, DATA_RECEIVED, DataReceivedAction } from './state';
 
 export const ACK_EMPLOYEE = 'ACK_EMPLOYEE';
 export class AckEmployeeAction implements Action {

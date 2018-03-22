@@ -1,6 +1,5 @@
-import { Action, combineReducers } from '@ngrx/store';
-import { EmployeeState, ACK_EMPLOYEE, employeeReducer } from './employees.state';
-import { PositionState, ACK_POSITION, positionReducer } from './positions.state';
+import { EmployeeState } from './employees.state';
+import { PositionState } from './positions.state';
 
 export const ACK_ALL = 'ACK_ALL';
 export class AckAllAction {
