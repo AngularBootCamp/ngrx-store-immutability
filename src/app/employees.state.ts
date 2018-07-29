@@ -1,11 +1,13 @@
-import { Action } from '@ngrx/store';
+import { Action, createFeatureSelector, createSelector } from '@ngrx/store';
 
 import { ACK_ALL, DATA_RECEIVED, DataReceivedAction } from './state';
 
 export const ACK_EMPLOYEE = 'ACK_EMPLOYEE';
 export class AckEmployeeAction implements Action {
   readonly type = ACK_EMPLOYEE;
-  constructor(public readonly payload: string) { }
+  // note: readonly in a constructor acts like public, protected, or private
+  // and creates a property on the object (with public visibility)
+  constructor(readonly payload: string) { }
 }
 
 export interface EmployeeState {
@@ -19,12 +21,13 @@ const defaultEmployeeState: EmployeeState = {
 };
 
 export function employeeReducer(
-    state: EmployeeState = defaultEmployeeState,
-    action: Action): EmployeeState {
+  state: EmployeeState = defaultEmployeeState,
+  action: Action): EmployeeState {
   switch (action.type) {
     case ACK_EMPLOYEE:
       return ackEmployee(state, (action as AckEmployeeAction).payload);
     case ACK_ALL:
+      // immutably update state
       return {
         currentEmployees: [...state.currentEmployees, ...state.newEmployees],
         newEmployees: []
@@ -42,3 +45,14 @@ function ackEmployee(currentState: EmployeeState, employee: string): EmployeeSta
   const currentEmployees = [...currentState.currentEmployees, employee];
   return { newEmployees, currentEmployees };
 }
+
+// createSelector will memoize (cache) the result, meaning it will
+// give the same object until the state changes
+const getEmployeeState =
+  createFeatureSelector<EmployeeState>('employees');
+
+export const getNewEmployees =
+  createSelector(getEmployeeState, state => state.newEmployees);
+
+export const getCurrentEmployees =
+  createSelector(getEmployeeState, state => state.currentEmployees);

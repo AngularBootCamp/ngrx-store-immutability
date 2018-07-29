@@ -1,6 +1,6 @@
-import { Action } from '@ngrx/store';
+import { Action, createFeatureSelector, createSelector } from '@ngrx/store';
 
-import { ACK_ALL, DataReceivedAction, DATA_RECEIVED } from './state';
+import { ACK_ALL, DATA_RECEIVED, DataReceivedAction } from './state';
 
 export const ACK_POSITION = 'ACK_POSITION';
 export class AckPositionAction implements Action {
@@ -26,6 +26,7 @@ export function positionReducer(
     case ACK_POSITION:
       return ackPosition((action as AckPositionAction).payload, state);
     case ACK_ALL:
+      // defensive copy of the data going into the store
       return {
         currentPositions: [...state.currentPositions, ...state.newPositions],
         newPositions: []
@@ -38,8 +39,21 @@ export function positionReducer(
   }
 }
 
+// defensive copy of the data going into the store
 function ackPosition(position: string, currentState: PositionState): PositionState {
   const newPositions = currentState.newPositions.filter(x => x !== position);
   const currentPositions = [...currentState.currentPositions, position];
   return { newPositions, currentPositions };
 }
+
+// defensive copy of the data coming out of the store
+// createSelector will memoize (cache) the result, meaning it will
+// give the same object until the state changes
+const getPositionState =
+  createFeatureSelector<PositionState>('positions');
+
+export const getNewPositions =
+  createSelector(getPositionState, state => [...state.newPositions]);
+
+export const getCurrentPositions =
+  createSelector(getPositionState, state => [...state.currentPositions]);

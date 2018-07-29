@@ -1,8 +1,8 @@
-import { AckEmployeeAction } from './../../employees.state';
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
+import { AckEmployeeAction, getCurrentEmployees, getNewEmployees } from './../../employees.state';
 import { AppState } from '../../state';
 
 /*
@@ -19,8 +19,8 @@ export class EmployeeListComponent {
   newEmployees: Observable<string[]>;
 
   constructor(private store: Store<AppState>) {
-    this.curEmployees = store.select(state => state.employees.currentEmployees);
-    this.newEmployees = store.select(state => state.employees.newEmployees);
+    this.curEmployees = store.select(getCurrentEmployees);
+    this.newEmployees = store.select(getNewEmployees);
   }
 
   ackEmp(employee: string) {
