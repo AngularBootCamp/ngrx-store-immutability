@@ -1,7 +1,7 @@
-import { DataReceivedAction, AckAllAction } from './../state';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
+import { AckAllAction, DataReceivedAction } from '../state';
 import { AppState } from '../state';
 
 @Component({
