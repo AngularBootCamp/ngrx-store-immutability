@@ -1,10 +1,10 @@
 import { Action, createFeatureSelector, createSelector } from '@ngrx/store';
 
-import { ACK_ALL, DATA_RECEIVED, DataReceivedAction } from './state';
+import { DataReceivedAction, ackAll, dataReceived } from './state';
 
-export const ACK_EMPLOYEE = 'ACK_EMPLOYEE';
+export const ackEmployee = 'ACK_EMPLOYEE';
 export class AckEmployeeAction implements Action {
-  readonly type = ACK_EMPLOYEE;
+  readonly type = ackEmployee;
   // note: readonly in a constructor acts like public, protected, or private
   // and creates a property on the object (with public visibility)
   constructor(readonly payload: string) { }
@@ -24,15 +24,14 @@ export function employeeReducer(
   state: EmployeeState = defaultEmployeeState,
   action: Action): EmployeeState {
   switch (action.type) {
-    case ACK_EMPLOYEE:
-      return ackEmployee(state, (action as AckEmployeeAction).payload);
-    case ACK_ALL:
-      // immutably update state
+    case ackEmployee:
+      return acknowledgeEmployee(state, (action as AckEmployeeAction).payload);
+    case ackAll:
       return {
         currentEmployees: [...state.currentEmployees, ...state.newEmployees],
         newEmployees: []
       };
-    case DATA_RECEIVED:
+    case dataReceived:
       const a = (action as DataReceivedAction);
       return a.data.employees;
     default:
@@ -40,7 +39,7 @@ export function employeeReducer(
   }
 }
 
-function ackEmployee(currentState: EmployeeState, employee: string): EmployeeState {
+function acknowledgeEmployee(currentState: EmployeeState, employee: string): EmployeeState {
   const newEmployees = currentState.newEmployees.filter(x => x !== employee);
   const currentEmployees = [...currentState.currentEmployees, employee];
   return { newEmployees, currentEmployees };
