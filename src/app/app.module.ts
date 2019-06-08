@@ -28,4 +28,4 @@ import { AppState } from './state';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
