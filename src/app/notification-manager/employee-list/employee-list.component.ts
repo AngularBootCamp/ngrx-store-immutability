@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import {
-  AckEmployeeAction,
+  ackEmployee,
   getCurrentEmployees,
   getNewEmployees
 } from '../../employees.state';
@@ -27,6 +27,6 @@ export class EmployeeListComponent {
   }
 
   ackEmp(employee: string) {
-    this.store.dispatch(new AckEmployeeAction(employee));
+    this.store.dispatch(ackEmployee({ employee }));
   }
 }

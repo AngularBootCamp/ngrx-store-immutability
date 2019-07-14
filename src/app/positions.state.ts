@@ -1,16 +1,23 @@
 import {
-  Action,
+  createAction,
   createFeatureSelector,
-  createSelector
+  createReducer,
+  createSelector,
+  on,
+  props
 } from '@ngrx/store';
 
-import { DataReceivedAction, ackAll, dataReceived } from './state';
+import { AppState, ackAll } from './state';
 
-export const ackPosition = 'ACK_POSITION';
-export class AckPositionAction implements Action {
-  type = ackPosition;
-  constructor(public payload: string) {}
-}
+export const ackPosition = createAction(
+  'ACK_POSITION',
+  props<{ position: string }>()
+);
+
+export const positionsReceived = createAction(
+  'POSITION_RECEIVED',
+  props<{ positions: PositionState }>()
+);
 
 const defaultPositionState: PositionState = {
   newPositions: [],
@@ -22,31 +29,22 @@ export interface PositionState {
   currentPositions: string[];
 }
 
-export function positionReducer(
-  state: PositionState = defaultPositionState,
-  action: Action
-): PositionState {
-  switch (action.type) {
-    case ackPosition:
-      return acknowledgePosition(
-        (action as AckPositionAction).payload,
-        state
-      );
-    case ackAll:
-      return {
-        currentPositions: [
-          ...state.currentPositions,
-          ...state.newPositions
-        ],
-        newPositions: []
-      };
-    case dataReceived:
-      const a = action as DataReceivedAction;
-      return a.data.positions;
-    default:
-      return state;
-  }
-}
+export const positionReducer = createReducer(
+  defaultPositionState,
+  on(ackPosition, (state, action) =>
+    acknowledgePosition(action.position, state)
+  ),
+  on(ackAll, state => {
+    return {
+      currentPositions: [
+        ...state.currentPositions,
+        ...state.newPositions
+      ],
+      newPositions: []
+    };
+  }),
+  on(positionsReceived, (_state, action) => action.positions)
+);
 
 function acknowledgePosition(
   position: string,
@@ -65,9 +63,10 @@ function acknowledgePosition(
 // defensive copy of the data coming out of the store
 // createSelector will memoize (cache) the result, meaning it will
 // give the same object until the state changes
-const getPositionState = createFeatureSelector<PositionState>(
-  'positions'
-);
+const getPositionState = createFeatureSelector<
+  AppState,
+  PositionState
+>('positions');
 
 export const getNewPositions = createSelector(
   getPositionState,

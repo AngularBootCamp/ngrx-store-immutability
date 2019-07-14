@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { AckAllAction, AppState, DataReceivedAction } from '../state';
+import { EmployeeState, employeesReceived } from '../employees.state';
+import { PositionState, positionsReceived } from '../positions.state';
+import { AppState, ackAll } from '../state';
 
 @Component({
   selector: 'notification-manager',
@@ -9,30 +11,31 @@ import { AckAllAction, AppState, DataReceivedAction } from '../state';
 })
 export class NotificationManagerComponent {
   constructor(private store: Store<AppState>) {
-    const payload: AppState = {
-      employees: {
-        currentEmployees: [
-          'Alice Anderson',
-          'Billy Burton',
-          'Carol Carson',
-          'David Dennison'
-        ],
-        newEmployees: ['Erin Ericcson', 'Frank Ferdinand']
-      },
-      positions: {
-        currentPositions: [
-          'Copier',
-          'Secretary to Customer Design Spec Engineer',
-          'Tester',
-          'Phone Bank Worker'
-        ],
-        newPositions: ['Manager', 'Break Room Attendant']
-      }
+    const employees: EmployeeState = {
+      currentEmployees: [
+        'Alice Anderson',
+        'Billy Burton',
+        'Carol Carson',
+        'David Dennison'
+      ],
+      newEmployees: ['Erin Ericcson', 'Frank Ferdinand']
     };
-    store.dispatch(new DataReceivedAction(payload));
+
+    const positions: PositionState = {
+      currentPositions: [
+        'Copier',
+        'Secretary to Customer Design Spec Engineer',
+        'Tester',
+        'Phone Bank Worker'
+      ],
+      newPositions: ['Manager', 'Break Room Attendant']
+    };
+
+    store.dispatch(employeesReceived({ employees }));
+    store.dispatch(positionsReceived({ positions }));
   }
 
   ackAll() {
-    this.store.dispatch(new AckAllAction());
+    this.store.dispatch(ackAll());
   }
 }

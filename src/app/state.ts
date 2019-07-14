@@ -1,17 +1,9 @@
+import { createAction } from '@ngrx/store';
+
 import { EmployeeState } from './employees.state';
 import { PositionState } from './positions.state';
 
-export const ackAll = 'ACK_ALL';
-export class AckAllAction {
-  readonly type = ackAll;
-}
-export const dataReceived = 'DATA_RECEIVED';
-export class DataReceivedAction {
-  readonly type = dataReceived;
-  // note: readonly in a constructor acts like public, protected, or private
-  // and creates a property on the object (with public visibility)
-  constructor(readonly data: AppState) {}
-}
+export const ackAll = createAction('ACK_ALL');
 
 export interface AppState {
   employees: EmployeeState;
