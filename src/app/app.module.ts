@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { EmployeeListComponent } from './notification-manager/employee-list/employee-list.component';
 import { NotificationManagerComponent } from './notification-manager/notification-manager.component';
 import { PositionListComponent } from './notification-manager/position-list/position-list.component';
-import { ROOT_REDUCERS } from './reducers';
+import { reducers } from './reducers';
 import { SharedModule } from './shared-module/shared.module';
 import { AppState } from './state';
 
@@ -19,13 +19,14 @@ import { AppState } from './state';
   ],
   imports: [
     BrowserModule,
-    StoreModule.forRoot<AppState>(ROOT_REDUCERS, {
-      // Starting with NgRx 9 these will be turned on by default
+    StoreModule.forRoot<AppState>(reducers, {
       runtimeChecks: {
-        strictStateImmutability: true,
         strictStateSerializability: true,
-        strictActionImmutability: true,
         strictActionSerializability: true
+
+        // As of NgRx 9 these runtime checks are turned on by default:
+        // strictStateImmutability: true,
+        // strictActionImmutability: true
       }
     }),
     SharedModule
