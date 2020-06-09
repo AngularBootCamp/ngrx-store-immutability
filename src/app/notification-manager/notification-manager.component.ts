@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { EmployeeState, employeesReceived } from '../employees.state';
-import { PositionState, positionsReceived } from '../positions.state';
-import { AppState, ackAll } from '../state';
+import { HomeTaskState, homeTasksReceived } from '../home-task.state';
+import { AppState, completeAll } from '../state';
+import { WorkTaskState, workTasksReceived } from '../work-task.state';
 
 @Component({
   selector: 'notification-manager',
@@ -11,31 +11,31 @@ import { AppState, ackAll } from '../state';
 })
 export class NotificationManagerComponent {
   constructor(private store: Store<AppState>) {
-    const employees: EmployeeState = {
-      currentEmployees: [
-        'Alice Anderson',
-        'Billy Burton',
-        'Carol Carson',
-        'David Dennison'
+    const worktasks: WorkTaskState = {
+      doneWork: [
+        'file paperwork',
+        'send emails',
+        'work on project A',
+        'submit report to manager'
       ],
-      newEmployees: ['Erin Ericcson', 'Frank Ferdinand']
+      todoWork: ['work on project B', 'update task list']
     };
 
-    const positions: PositionState = {
-      currentPositions: [
-        'Copier',
-        'Secretary to Customer Design Spec Engineer',
-        'Tester',
-        'Phone Bank Worker'
+    const hometasks: HomeTaskState = {
+      doneHome: [
+        'cook dinner',
+        'go grocery shopping',
+        'sweep the floors',
+        'do the laundry'
       ],
-      newPositions: ['Manager', 'Break Room Attendant']
+      todoHome: ['fix the leaky faucet', 'mow the lawn']
     };
 
-    store.dispatch(employeesReceived({ employees }));
-    store.dispatch(positionsReceived({ positions }));
+    store.dispatch(workTasksReceived({ worktasks }));
+    store.dispatch(homeTasksReceived({ hometasks }));
   }
 
-  ackAll() {
-    this.store.dispatch(ackAll());
+  completeAll() {
+    this.store.dispatch(completeAll());
   }
 }

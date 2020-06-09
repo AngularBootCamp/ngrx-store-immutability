@@ -1,11 +1,11 @@
 import { createAction } from '@ngrx/store';
 
-import { EmployeeState } from './employees.state';
-import { PositionState } from './positions.state';
+import { HomeTaskState } from './home-task.state';
+import { WorkTaskState } from './work-task.state';
 
-export const ackAll = createAction('ACK_ALL');
+export const completeAll = createAction('COMPLETE_ALL');
 
 export interface AppState {
-  employees: EmployeeState;
-  positions: PositionState;
+  worktasks: WorkTaskState;
+  hometasks: HomeTaskState;
 }

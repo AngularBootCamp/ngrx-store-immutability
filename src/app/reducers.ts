@@ -1,10 +1,10 @@
 import { ActionReducerMap } from '@ngrx/store';
 
-import { employeeReducer } from './employees.state';
-import { positionReducer } from './positions.state';
+import { homeTaskReducer } from './home-task.state';
 import { AppState } from './state';
+import { workTaskReducer } from './work-task.state';
 
 export const reducers: ActionReducerMap<AppState> = {
-  employees: employeeReducer,
-  positions: positionReducer
+  worktasks: workTaskReducer,
+  hometasks: homeTaskReducer
 };

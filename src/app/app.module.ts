@@ -3,19 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from '@ngrx/store';
 
 import { AppComponent } from './app.component';
-import { EmployeeListComponent } from './notification-manager/employee-list/employee-list.component';
+import { HomeTaskListComponent } from './notification-manager/home-task-list/home-task-list.component';
 import { NotificationManagerComponent } from './notification-manager/notification-manager.component';
-import { PositionListComponent } from './notification-manager/position-list/position-list.component';
+import { WorkTaskListComponent } from './notification-manager/work-task-list/work-task-list.component';
 import { reducers } from './reducers';
-import { SharedModule } from './shared-module/shared.module';
 import { AppState } from './state';
+import { TodoListModule } from './todo-list/todo-list.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotificationManagerComponent,
-    EmployeeListComponent,
-    PositionListComponent
+    WorkTaskListComponent,
+    HomeTaskListComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +29,7 @@ import { AppState } from './state';
         // strictActionImmutability: true
       }
     }),
-    SharedModule
+    TodoListModule
   ],
   bootstrap: [AppComponent]
 })
