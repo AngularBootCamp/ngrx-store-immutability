@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { HomeTaskState, homeTasksReceived } from '../home-task.state';
-import { AppState, completeAll } from '../state';
+import { completeAll } from '../state';
 import { WorkTaskState, workTasksReceived } from '../work-task.state';
 
 @Component({
@@ -10,7 +10,7 @@ import { WorkTaskState, workTasksReceived } from '../work-task.state';
   templateUrl: './notification-manager.component.html'
 })
 export class NotificationManagerComponent {
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store) {
     const worktasks: WorkTaskState = {
       doneWork: [
         'file paperwork',

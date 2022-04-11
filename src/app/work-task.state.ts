@@ -7,7 +7,7 @@ import {
   props
 } from '@ngrx/store';
 
-import { AppState, completeAll } from './state';
+import { completeAll } from './state';
 
 export const setWorkTask = createAction(
   'SET_WORK_TASK',
@@ -34,12 +34,10 @@ export const workTaskReducer = createReducer(
   on(setWorkTask, (state, action) =>
     setWorkTaskStatus(state, action.worktask, action.complete)
   ),
-  on(completeAll, state => {
-    return {
-      doneWork: [...state.doneWork, ...state.todoWork],
-      todoWork: []
-    };
-  }),
+  on(completeAll, state => ({
+    doneWork: [...state.doneWork, ...state.todoWork],
+    todoWork: []
+  })),
   on(workTasksReceived, (_state, action) => action.worktasks)
 );
 
@@ -60,10 +58,8 @@ function setWorkTaskStatus(
 
 // createSelector will memoize (cache) the result, meaning it will
 // give the same object until the state changes
-const getWorkTaskState = createFeatureSelector<
-  AppState,
-  WorkTaskState
->('worktasks');
+const getWorkTaskState =
+  createFeatureSelector<WorkTaskState>('worktasks');
 
 export const getTodoWork = createSelector(
   getWorkTaskState,

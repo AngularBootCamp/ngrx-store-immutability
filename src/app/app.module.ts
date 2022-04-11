@@ -13,9 +13,9 @@ import { TodoListModule } from './todo-list/todo-list.module';
 @NgModule({
   declarations: [
     AppComponent,
+    HomeTaskListComponent,
     NotificationManagerComponent,
-    WorkTaskListComponent,
-    HomeTaskListComponent
+    WorkTaskListComponent
   ],
   imports: [
     BrowserModule,
