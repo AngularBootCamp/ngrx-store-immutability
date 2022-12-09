@@ -3,11 +3,15 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import {
-  getDoneHome,
-  getTodoHome,
-  setHomeTask
+  selectDoneHome,
+  selectTodoHome,
+  homeTaskActions
 } from '../../home-task.state';
 
+/*
+  Components now pass and receive information between themselves
+  and the store
+*/
 @Component({
   selector: 'home-task-list',
   templateUrl: './home-task-list.component.html'
@@ -20,11 +24,15 @@ export class HomeTaskListComponent {
   outline = 'check_box_outline_blank';
 
   constructor(private store: Store) {
-    this.done = store.select(getDoneHome);
-    this.todo = store.select(getTodoHome);
+    this.done = store.select(selectDoneHome);
+    this.todo = store.select(selectTodoHome);
   }
 
-  homeTask(hometask: string, complete: boolean) {
-    this.store.dispatch(setHomeTask({ hometask, complete }));
+  taskCompleted(task: string) {
+    this.store.dispatch(homeTaskActions.taskCompleted({ task }));
+  }
+
+  taskReset(task: string) {
+    this.store.dispatch(homeTaskActions.taskReset({ task }));
   }
 }

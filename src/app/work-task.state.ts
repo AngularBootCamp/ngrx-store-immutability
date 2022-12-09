@@ -1,5 +1,5 @@
 import {
-  createAction,
+  createActionGroup,
   createFeatureSelector,
   createReducer,
   createSelector,
@@ -7,66 +7,70 @@ import {
   props
 } from '@ngrx/store';
 
-import { completeAll } from './state';
+import { globalActions } from './state';
 
-export const setWorkTask = createAction(
-  'SET_WORK_TASK',
-  props<{ worktask: string; complete: boolean }>()
-);
-
-export const workTasksReceived = createAction(
-  'WORK_TASKS_RECEIVED',
-  props<{ worktasks: WorkTaskState }>()
-);
+export const workTaskActions = createActionGroup({
+  source: 'Work Tasks',
+  events: {
+    'Task Completed': props<{ task: string }>(),
+    'Task Reset': props<{ task: string }>()
+  }
+});
 
 export interface WorkTaskState {
-  todoWork: string[];
-  doneWork: string[];
+  todo: string[];
+  done: string[];
 }
 
 const defaultWorkTaskState: WorkTaskState = {
-  todoWork: [],
-  doneWork: []
+  todo: [],
+  done: []
 };
 
 export const workTaskReducer = createReducer(
   defaultWorkTaskState,
-  on(setWorkTask, (state, action) =>
-    setWorkTaskStatus(state, action.worktask, action.complete)
+  on(workTaskActions.taskCompleted, (state, action) =>
+    setWorkTaskStatus(state, action.task, true)
   ),
-  on(completeAll, state => ({
-    doneWork: [...state.doneWork, ...state.todoWork],
-    todoWork: []
+  on(workTaskActions.taskReset, (state, action) =>
+    setWorkTaskStatus(state, action.task, false)
+  ),
+  on(globalActions.completeAll, state => ({
+    done: [...state.done, ...state.todo],
+    todo: []
   })),
-  on(workTasksReceived, (_state, action) => action.worktasks)
+  on(
+    globalActions.tasksReceived,
+    (_state, { workTasks }) => workTasks
+  )
 );
 
 function setWorkTaskStatus(
   currentState: WorkTaskState,
   task: string,
-  complete: boolean
+  markDone: boolean
 ): WorkTaskState {
-  const doneWork = currentState.doneWork.filter(x => x !== task);
-  const todoWork = currentState.todoWork.filter(x => x !== task);
-  if (complete) {
-    todoWork.push(task);
+  const done = currentState.done.filter(x => x !== task);
+  const todo = currentState.todo.filter(x => x !== task);
+  if (markDone) {
+    done.push(task);
   } else {
-    doneWork.push(task);
+    todo.push(task);
   }
-  return { todoWork, doneWork };
+  return { todo, done };
 }
 
 // createSelector will memoize (cache) the result, meaning it will
 // give the same object until the state changes
-const getWorkTaskState =
-  createFeatureSelector<WorkTaskState>('worktasks');
+const selectWorkTaskState =
+  createFeatureSelector<WorkTaskState>('workTasks');
 
-export const getTodoWork = createSelector(
-  getWorkTaskState,
-  state => state.todoWork
+export const selectTodoWork = createSelector(
+  selectWorkTaskState,
+  state => [...state.todo]
 );
 
-export const getDoneWork = createSelector(
-  getWorkTaskState,
-  state => state.doneWork
+export const selectDoneWork = createSelector(
+  selectWorkTaskState,
+  state => [...state.done]
 );

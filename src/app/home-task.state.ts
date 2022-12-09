@@ -1,5 +1,5 @@
 import {
-  createAction,
+  createActionGroup,
   createFeatureSelector,
   createReducer,
   createSelector,
@@ -7,65 +7,70 @@ import {
   props
 } from '@ngrx/store';
 
-import { completeAll } from './state';
+import { globalActions } from './state';
 
-export const setHomeTask = createAction(
-  'SET_HOME_TASK',
-  props<{ hometask: string; complete: boolean }>()
-);
-
-export const homeTasksReceived = createAction(
-  'HOME_TASKS_RECEIVED',
-  props<{ hometasks: HomeTaskState }>()
-);
-
-const defaultHomeTaskState: HomeTaskState = {
-  todoHome: [],
-  doneHome: []
-};
+export const homeTaskActions = createActionGroup({
+  source: 'Home Tasks',
+  events: {
+    'Task Completed': props<{ task: string }>(),
+    'Task Reset': props<{ task: string }>()
+  }
+});
 
 export interface HomeTaskState {
-  todoHome: string[];
-  doneHome: string[];
+  todo: string[];
+  done: string[];
 }
+
+const defaultHomeTaskState: HomeTaskState = {
+  todo: [],
+  done: []
+};
 
 export const homeTaskReducer = createReducer(
   defaultHomeTaskState,
-  on(setHomeTask, (state, action) =>
-    setHomeTaskStatus(state, action.hometask, action.complete)
+  on(homeTaskActions.taskCompleted, (state, action) =>
+    setHomeTaskStatus(state, action.task, true)
   ),
-  on(completeAll, state => ({
-    doneHome: [...state.doneHome, ...state.todoHome],
-    todoHome: []
+  on(homeTaskActions.taskReset, (state, action) =>
+    setHomeTaskStatus(state, action.task, false)
+  ),
+  on(globalActions.completeAll, state => ({
+    done: [...state.done, ...state.todo],
+    todo: []
   })),
-  on(homeTasksReceived, (_state, action) => action.hometasks)
+  on(
+    globalActions.tasksReceived,
+    (_state, { homeTasks }) => homeTasks
+  )
 );
 
 function setHomeTaskStatus(
   currentState: HomeTaskState,
   task: string,
-  complete: boolean
+  markDone: boolean
 ): HomeTaskState {
-  const doneHome = currentState.doneHome.filter(x => x !== task);
-  const todoHome = currentState.todoHome.filter(x => x !== task);
-  if (complete) {
-    todoHome.push(task);
+  const done = currentState.done.filter(x => x !== task);
+  const todo = currentState.todo.filter(x => x !== task);
+  if (markDone) {
+    done.push(task);
   } else {
-    doneHome.push(task);
+    todo.push(task);
   }
-  return { todoHome, doneHome };
+  return { todo, done };
 }
 
-// defensive copy of the data coming out of the store
 // createSelector will memoize (cache) the result, meaning it will
 // give the same object until the state changes
-const getHomeTaskState =
-  createFeatureSelector<HomeTaskState>('hometasks');
+const selectHomeTaskState =
+  createFeatureSelector<HomeTaskState>('homeTasks');
 
-export const getTodoHome = createSelector(getHomeTaskState, state => [
-  ...state.todoHome
-]);
+export const selectTodoHome = createSelector(
+  selectHomeTaskState,
+  state => [...state.todo]
+);
 
-export const getDoneHome = createSelector(getHomeTaskState, state => [
-  ...state.doneHome
-]);
+export const selectDoneHome = createSelector(
+  selectHomeTaskState,
+  state => [...state.done]
+);

@@ -3,13 +3,13 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import {
-  getDoneWork,
-  getTodoWork,
-  setWorkTask
+  selectDoneWork,
+  selectTodoWork,
+  workTaskActions
 } from '../../work-task.state';
 
 /*
-  Components now pass and receive information between itself
+  Components now pass and receive information between themselves
   and the store
 */
 @Component({
@@ -24,11 +24,15 @@ export class WorkTaskListComponent {
   outline = 'check_box_outline_blank';
 
   constructor(private store: Store) {
-    this.done = store.select(getDoneWork);
-    this.todo = store.select(getTodoWork);
+    this.done = store.select(selectDoneWork);
+    this.todo = store.select(selectTodoWork);
   }
 
-  workTask(worktask: string, complete: boolean) {
-    this.store.dispatch(setWorkTask({ worktask, complete }));
+  taskCompleted(task: string) {
+    this.store.dispatch(workTaskActions.taskCompleted({ task }));
+  }
+
+  taskReset(task: string) {
+    this.store.dispatch(workTaskActions.taskReset({ task }));
   }
 }

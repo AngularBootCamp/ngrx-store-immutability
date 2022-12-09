@@ -1,11 +1,20 @@
-import { createAction } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { HomeTaskState } from './home-task.state';
 import { WorkTaskState } from './work-task.state';
 
-export const completeAll = createAction('COMPLETE_ALL');
+export const globalActions = createActionGroup({
+  source: 'Page',
+  events: {
+    'Complete All': emptyProps(),
+    'Tasks Received': props<{
+      workTasks: WorkTaskState;
+      homeTasks: HomeTaskState;
+    }>()
+  }
+});
 
 export interface AppState {
-  worktasks: WorkTaskState;
-  hometasks: HomeTaskState;
+  workTasks: WorkTaskState;
+  homeTasks: HomeTaskState;
 }

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { HomeTaskState, homeTasksReceived } from '../home-task.state';
-import { completeAll } from '../state';
-import { WorkTaskState, workTasksReceived } from '../work-task.state';
+import { HomeTaskState } from '../home-task.state';
+import { globalActions } from '../state';
+import { WorkTaskState } from '../work-task.state';
 
 @Component({
   selector: 'notification-manager',
@@ -11,31 +11,32 @@ import { WorkTaskState, workTasksReceived } from '../work-task.state';
 })
 export class NotificationManagerComponent {
   constructor(private store: Store) {
-    const worktasks: WorkTaskState = {
-      doneWork: [
+    const workTasks: WorkTaskState = {
+      done: [
         'file paperwork',
         'send emails',
         'work on project A',
         'submit report to manager'
       ],
-      todoWork: ['work on project B', 'update task list']
+      todo: ['work on project B', 'update task list']
     };
 
-    const hometasks: HomeTaskState = {
-      doneHome: [
+    const homeTasks: HomeTaskState = {
+      done: [
         'cook dinner',
         'go grocery shopping',
         'sweep the floors',
         'do the laundry'
       ],
-      todoHome: ['fix the leaky faucet', 'mow the lawn']
+      todo: ['fix the leaky faucet', 'mow the lawn']
     };
 
-    store.dispatch(workTasksReceived({ worktasks }));
-    store.dispatch(homeTasksReceived({ hometasks }));
+    store.dispatch(
+      globalActions.tasksReceived({ workTasks, homeTasks })
+    );
   }
 
   completeAll() {
-    this.store.dispatch(completeAll());
+    this.store.dispatch(globalActions.completeAll());
   }
 }

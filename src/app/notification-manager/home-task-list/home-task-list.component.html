@@ -5,7 +5,7 @@
     <todo-list
       [list]="(done | async) ?? []"
       [icon]="checkbox"
-      (setTaskStatus)="homeTask($event, true)"
+      (setTaskStatus)="taskReset($event)"
     ></todo-list>
   </div>
 </section>
@@ -16,7 +16,7 @@
     <todo-list
       [list]="(todo | async) ?? []"
       [icon]="outline"
-      (setTaskStatus)="homeTask($event, false)"
+      (setTaskStatus)="taskCompleted($event)"
     ></todo-list>
   </div>
 </section>
