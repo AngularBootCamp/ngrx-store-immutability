@@ -5,10 +5,15 @@ import { HomeTaskState } from '../home-task.state';
 import { globalActions } from '../state';
 import { WorkTaskState } from '../work-task.state';
 
+import { HomeTaskListComponent } from './home-task-list/home-task-list.component';
+import { WorkTaskListComponent } from './work-task-list/work-task-list.component';
+
 @Component({
   selector: 'app-notification-manager',
   templateUrl: './notification-manager.component.html',
-  styleUrls: ['./notification-manager.component.scss']
+  styleUrls: ['./notification-manager.component.scss'],
+  standalone: true,
+  imports: [WorkTaskListComponent, HomeTaskListComponent]
 })
 export class NotificationManagerComponent {
   constructor(private store: Store) {

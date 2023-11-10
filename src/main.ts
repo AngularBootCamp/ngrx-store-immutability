@@ -1,10 +1,22 @@
 // https://github.com/stackblitz/core/issues/2366
 import 'zone.js'; // Avoid error in StackBlitz for Angular polyfill
 
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideStore } from '@ngrx/store';
 
-import { AppModule } from './app/app.module';
+import { AppComponent } from './app/app.component';
+import { reducers } from './app/reducers';
 
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideStore(reducers, {
+      runtimeChecks: {
+        strictStateSerializability: true,
+        strictActionSerializability: true
+        // As of NgRx 9 these runtime checks are turned on by default:
+        // strictStateImmutability: true,
+        // strictActionImmutability: true
+      }
+    })
+  ]
+}).catch(err => console.error(err));
