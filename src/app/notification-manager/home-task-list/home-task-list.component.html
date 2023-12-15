@@ -6,7 +6,7 @@
     [list]="(done | async) ?? []"
     [icon]="checkbox"
     (setTaskStatus)="taskReset($event)"
-  ></app-todo-list>
+  />
 </article>
 
 <article>
@@ -15,5 +15,5 @@
     [list]="(todo | async) ?? []"
     [icon]="outline"
     (setTaskStatus)="taskCompleted($event)"
-  ></app-todo-list>
+  />
 </article>
